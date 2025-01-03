@@ -27,39 +27,47 @@ const productSlice = createSlice({
       state.isLoading = false;
       state.currentProduct = action.payload;
     },
-    
+    addedToCart(state,action){
+      state.cart=[...state.cart,action.payload]
+    }
   },
 });
 
-export const { productsLoading, productsLoaded, setError, currentProductLoaded } = productSlice.actions;
+export const { productsLoading, productsLoaded, setError, currentProductLoaded , addedToCart} = productSlice.actions;
 
-export const fetchProducts = () => async (dispatch) => {
-  try {
-    dispatch(productsLoading());
-    const res = await fetch("https://dummyjson.com/products");
-    if (!res.ok) {
-      throw new Error("Failed to fetch products");
+export function fetchProducts() {
+  return async function (dispatch) {
+    try {
+      dispatch(productsLoading());
+      const res = await fetch("https://dummyjson.com/products");
+      if (!res.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await res.json();
+      dispatch(productsLoaded(data.products));
+    } catch (error) {
+      dispatch(setError(error.message));
     }
-    const data = await res.json();
-    dispatch(productsLoaded(data.products));
-  } catch (error) {
-    dispatch(setError(error.message));
-  }
-};
+  };
+}
 
-export const fetchProduct = (productId) => async (dispatch) => {
-  try {
-    dispatch(productsLoading());
-    const res = await fetch(`https://dummyjson.com/products/${productId}`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch product");
+
+export function fetchProduct(productId) {
+  return async function (dispatch) {
+    try {
+      dispatch(productsLoading());
+      const res = await fetch(`https://dummyjson.com/products/${productId}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch product");
+      }
+      const data = await res.json();
+      console.log(data);
+      dispatch(currentProductLoaded(data));
+    } catch (error) {
+      dispatch(setError(error.message));
     }
-    const data = await res.json();
-    console.log(data);
-    dispatch(currentProductLoaded(data));
-  } catch (error) {
-    dispatch(setError(error.message));
-  }
-};
+  };
+}
+
 
 export const productReducer = productSlice.reducer;

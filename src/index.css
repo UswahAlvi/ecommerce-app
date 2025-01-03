@@ -1,0 +1,8 @@
+.btn-clr {
+    background-color: #aeeff0 !important;
+    border: none;
+}
+
+.btn-clr:hover {
+    background-color: #86dfe1 !important;
+}
