@@ -26,9 +26,6 @@ const productSlice = createSlice({
     currentProductLoaded(state, action) {
       state.isLoading = false;
       state.currentProduct = action.payload;
-    },
-    addedToCart(state,action){
-      state.cart=[...state.cart,action.payload]
     }
   },
 });

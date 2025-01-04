@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import Product from "../components/Product";
 import SpinnerFullPage from "../components/SpinnerFullPage";
+import CartButton from "../components/CartButton";
 
 export default function ProductListing() {
     const { products, isLoading } = useSelector((store) => store.product);
@@ -10,6 +11,8 @@ export default function ProductListing() {
     }
 
     return (
+        <>
+        <CartButton />
         <div className="container my-5">
             <h1 className="text-center mb-4">Product Listing</h1>
             <div
@@ -20,6 +23,6 @@ export default function ProductListing() {
                   <Product product={product} key={product.id}/>
                 ))}
             </div>
-        </div>
+        </div></>
     );
 }

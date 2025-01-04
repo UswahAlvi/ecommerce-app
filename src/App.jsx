@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNoTFound from './pages/PageNoTFound';
 import CartButton from './components/CartButton';
 import './App.css'
+import Checkout from './pages/Checkout';
 
 function App() {
   const dispatch = useDispatch();
@@ -18,12 +19,12 @@ function App() {
   }, [dispatch]);
   
   return (<>
-    <CartButton />
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<ProductListing />} />
         <Route path='products' element={<ProductListing />} />
         <Route path='products/:id' element={<ProductDetail/>} />
+        <Route path='/checkout' element={<Checkout />}></Route>
         <Route path='*' element={<PageNoTFound />}></Route>
       </Routes>
     </BrowserRouter></>
