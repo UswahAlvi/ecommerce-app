@@ -1,29 +1,36 @@
-import { useParams, useNavigate } from "react-router-dom"; 
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../slices/ProductSlice";
-import { addedToCart } from "../slices/CartSlice";
+import { addedToCart, selectParticularProduct } from "../slices/CartSlice";
 import SpinnerFullPage from "../components/SpinnerFullPage";
 import Spinner from "../components/Spinner";
 import CartButton from "../components/CartButton";
 
 export default function ProductDetail() {
     const { id } = useParams();
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isLoading, currentProduct: product } = useSelector(store => store.product);
+    const { isLoading, currentProduct: product } = useSelector((store) => store.product);
     const [imageLoading, setImageLoading] = useState(true);
     const [isAdded, setIsAdded] = useState(false);
 
     const handleAddToCart = () => {
-        dispatch(addedToCart({
-            id: product.id,
-            thumbnail: product.thumbnail,
-            title: product.title,
-            category: product.category,
-            price: product.price,
-        }));
+        dispatch(
+            addedToCart({
+                id: product.id,
+                thumbnail: product.thumbnail,
+                title: product.title,
+                category: product.category,
+                price: product.price,
+            })
+        );
         setIsAdded(true);
+    };
+
+    const handleCheckoutThisProduct = () => {
+        dispatch(selectParticularProduct(product));
+        navigate('/Checkout')
     };
 
     useEffect(() => {
@@ -55,7 +62,7 @@ export default function ProductDetail() {
                         <div className="col-md-6">
                             {imageLoading && <Spinner />}
                             <img
-                                src={product?.images?.[0]} 
+                                src={product?.images?.[0]}
                                 alt={product?.title}
                                 className={`img-fluid ${imageLoading ? "d-none" : ""}`}
                                 onLoad={() => setImageLoading(false)}
@@ -66,20 +73,42 @@ export default function ProductDetail() {
                             <h2>${product?.price?.toFixed(2)}</h2>
                             <p className="text-muted">Category: {product?.category}</p>
                             <p>{product?.description}</p>
-                            <p><strong>Brand:</strong> {product?.brand}</p>
-                            <p><strong>Stock Status:</strong> {product?.availabilityStatus}</p>
-                            <p><strong>Rating:</strong> {product?.rating} / 5</p>
-                            <p><strong>Warranty:</strong> {product?.warrantyInformation}</p>
-                            <p><strong>Shipping:</strong> {product?.shippingInformation}</p>
-                            <p><strong>Return Policy:</strong> {product?.returnPolicy}</p>
-                            <p><strong>Minimum Order Quantity:</strong> {product?.minimumOrderQuantity}</p>
-                            <button
-                                className="btn btn-clr px-5"
-                                onClick={handleAddToCart}
-                                disabled={isAdded}
-                            >
-                                {isAdded ? "Added!" : "Add to Cart"}
-                            </button>
+                            <p>
+                                <strong>Brand:</strong> {product?.brand}
+                            </p>
+                            <p>
+                                <strong>Stock Status:</strong> {product?.availabilityStatus}
+                            </p>
+                            <p>
+                                <strong>Rating:</strong> {product?.rating} / 5
+                            </p>
+                            <p>
+                                <strong>Warranty:</strong> {product?.warrantyInformation}
+                            </p>
+                            <p>
+                                <strong>Shipping:</strong> {product?.shippingInformation}
+                            </p>
+                            <p>
+                                <strong>Return Policy:</strong> {product?.returnPolicy}
+                            </p>
+                            <p>
+                                <strong>Minimum Order Quantity:</strong> {product?.minimumOrderQuantity}
+                            </p>
+                            <div className="d-flex gap-3">
+                                <button
+                                    className="btn btn-clr px-5"
+                                    onClick={handleAddToCart}
+                                    disabled={isAdded}
+                                >
+                                    {isAdded ? "Added!" : "Add to Cart"}
+                                </button>
+                                <button
+                                    className="btn btn-clr px-5"
+                                    onClick={handleCheckoutThisProduct}
+                                >
+                                    Checkout this product
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -89,9 +118,13 @@ export default function ProductDetail() {
                             {product?.reviews?.length > 0 ? (
                                 product?.reviews.map((review, index) => (
                                     <div key={index} className="border-bottom py-3">
-                                        <p><strong>{review?.reviewerName}</strong> - {review?.rating} / 5</p>
+                                        <p>
+                                            <strong>{review?.reviewerName}</strong> - {review?.rating} / 5
+                                        </p>
                                         <p>{review?.comment}</p>
-                                        <p className="text-muted">Posted on: {new Date(review?.date).toLocaleDateString()}</p>
+                                        <p className="text-muted">
+                                            Posted on: {new Date(review?.date).toLocaleDateString()}
+                                        </p>
                                     </div>
                                 ))
                             ) : (
@@ -105,7 +138,7 @@ export default function ProductDetail() {
                         <img
                             src={product?.meta?.qrCode}
                             alt="Product QR Code"
-                            style={{ width: '150px', height: '150px' }}
+                            style={{ width: "150px", height: "150px" }}
                         />
                     </div>
                 </div>

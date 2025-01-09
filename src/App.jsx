@@ -7,7 +7,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProductDetail from './pages/ProductDetail';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNoTFound from './pages/PageNoTFound';
-import CartButton from './components/CartButton';
 import './App.css'
 import Checkout from './pages/Checkout';
 
